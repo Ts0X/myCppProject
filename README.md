@@ -1,5 +1,7 @@
 # My C++ Project
 
+  #Go to keylogger.cpp and enter your log file path e.g. path/myCppProject/myLogFile.txt
+
 This is a C++ project that includes various features like brute force, hash functions, AES encryption/decryption, and a keylogger.
 
 #First clone the repository, run the installer, if the installer doesn't help read the readme and do it manually.
@@ -19,7 +21,11 @@ Before you can build and run the project, make sure you have the following insta
 - **Crypto++ Library**: Used for cryptographic functions.
   - Download Crypto++ from [here](https://www.cryptopp.com/).
   - Extract the Crypto++ files and make sure the `include` and `lib` folders are properly referenced when compiling the project.
-
+    
+- **Library for Dictionary Attacks**:
+  -You can use whatever library you want.
+  
+  
 ## Setting up the Project
 
 1. **Clone the repository**:
