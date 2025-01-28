@@ -1,7 +1,3 @@
-; -----------------------------------------
-; Setup Script for My C++ Project
-; -----------------------------------------
-
 [Setup]
 AppName=My C++ Project
 AppVersion=1.0
@@ -11,37 +7,38 @@ OutputDir=.
 OutputBaseFilename=MyCppProjectInstaller
 Compression=lzma
 SolidCompression=yes
-DisableDirPage=yes
-DisableProgramGroupPage=yes
 
 [Files]
-; Project source files
+; Όλα τα αρχεία του έργου
 Source: "*.cpp"; DestDir: "{app}"; Flags: ignoreversion
 Source: "*.h"; DestDir: "{app}"; Flags: ignoreversion
+Source: "rockyou.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "key_file.txt"; DestDir: "{app}"; Flags: ignoreversion
 
-; Include the zipped libraries (MinGW, OpenSSL, Crypto++)
-Source: "mingw-w64-v11.0.0.zip"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "cryptopp564.zip"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "Win32OpenSSL-3_3_2.msi"; DestDir: "{tmp}"; Flags: deleteafterinstall
+; Προσθέτουμε το 7z.exe για αποσυμπίεση των zip αρχείων
+Source: "path\to\7z.exe"; DestDir: "{app}"; Flags: ignoreversion
+
+; Λειτουργίες αποσυμπίεσης των zip αρχείων
+Source: "mingw-w64-v11.0.0.zip"; DestDir: "{tmp}"; Flags: ignoreversion
+Source: "cryptopp564.zip"; DestDir: "{tmp}"; Flags: ignoreversion
+Source: "Win32OpenSSL-3_3_2.msi"; DestDir: "{tmp}"; Flags: ignoreversion
+
+; MinGW και Crypto++ Libraries
+Source: "libs\*"; DestDir: "{app}\libs"; Flags: recursesubdirs createallsubdirs
 
 [Run]
-; 7z.exe is used to extract the MinGW, OpenSSL, and Crypto++ files
-Filename: "{app}\7z.exe"; Parameters: "x {tmp}\mingw-w64-v11.0.0.zip -o{app}\MinGW\"; Flags: runhidden waituntilterminated
-Filename: "{app}\7z.exe"; Parameters: "x {tmp}\cryptopp564.zip -o{app}\Crypto++\"; Flags: runhidden waituntilterminated
+; Εκτελεί το 7z.exe για αποσυμπίεση των zip αρχείων
+Filename: "{app}\7z.exe"; Parameters: "x ""{tmp}\mingw-w64-v11.0.0.zip"" -o""{app}\MinGW"" -y"; Flags: runhidden waituntilterminated
+Filename: "{app}\7z.exe"; Parameters: "x ""{tmp}\cryptopp564.zip"" -o""{app}\CryptoPP"" -y"; Flags: runhidden waituntilterminated
 
-; Install OpenSSL silently
+; Εγκατάσταση του Win32OpenSSL από το MSI
 Filename: "{tmp}\Win32OpenSSL-3_3_2.msi"; Parameters: "/quiet"; Flags: runhidden waituntilterminated
 
-; Add MinGW to PATH
-Filename: "{cmd}"; Parameters: "/C setx PATH ""{app}\MinGW\bin;%PATH%"""; Flags: runhidden
+; Εκτελεί το MinGW-w64 για εγκατάσταση του MinGW
+Filename: "{app}\MinGW\bin\mingw32-make.exe"; Parameters: "install"; WorkingDir: "{app}\MinGW"; Flags: runhidden waituntilterminated
 
-; Compile and create the executable (main.exe) using g++
-Filename: "{cmd}"; Parameters: "/C g++ {app}\main.cpp {app}\brute_force.cpp {app}\hash_Functions.cpp {app}\dictionary.cpp {app}\aes_encrypt.cpp {app}\aes_decrypt.cpp {app}\createHash.cpp {app}\keylogger.cpp {app}\passGen.cpp {app}\hashidentify.cpp {app}\aes_common.cpp -o {app}\main.exe -I""{app}\Crypto++\include"" -L""{app}\Crypto++\lib"" -lssl -lcrypto"; Flags: runhidden waituntilterminated
+; Δημιουργεί το executable χρησιμοποιώντας το g++
+Filename: "{cmd}"; Parameters: "/C g++ main.cpp brute_force.cpp hash_Functions.cpp dictionary.cpp aes_encrypt.cpp aes_decrypt.cpp createHash.cpp keylogger.cpp passGen.cpp hashidentify.cpp aes_common.cpp -o main -I""{app}\OpenSSL\include"" -L""{app}\OpenSSL\lib"" -lssl -lcrypto"; WorkingDir: "{app}"; Flags: runhidden waituntilterminated
 
-; Clean up the temporary files after installation
-Filename: "{cmd}"; Parameters: "/C del {tmp}\mingw-w64-v11.0.0.zip"; Flags: runhidden
-Filename: "{cmd}"; Parameters: "/C del {tmp}\cryptopp564.zip"; Flags: runhidden
-Filename: "{cmd}"; Parameters: "/C del {tmp}\Win32OpenSSL-3_3_2.msi"; Flags: runhidden
-
-; Run the program after installation
+; Εκκινεί το main.exe
 Filename: "{app}\main.exe"; Flags: nowait postinstall skipifsilent
