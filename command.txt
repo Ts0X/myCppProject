@@ -1,0 +1,1 @@
+g++ main.cpp brute_force.cpp hash_Functions.cpp dictionary.cpp aes_encrypt.cpp aes_decrypt.cpp createHash.cpp keylogger.cpp passGen.cpp hashidentify.cpp aes_common.cpp -o main -I"C:\Program Files\OpenSSL-Win64\include" -L"C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD" -lssl -lcrypto
