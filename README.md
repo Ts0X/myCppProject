@@ -1,5 +1,7 @@
 # My C++ Project
 
+Read and the code comments to see how they work.
+ 
   #Go to keylogger.cpp and enter your log file path e.g. path/myCppProject/myLogFile.txt
 
 This is a C++ project that includes various features like brute force, hash functions, AES encryption/decryption, and a keylogger.
